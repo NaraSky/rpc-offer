@@ -23,7 +23,7 @@ public class ScannerTest {
      */
     @Test
     public void testScannerClassNameListByRpcService() throws Exception {
-        RpcServiceScanner.doScannerWithRpcServiceAnnotationFilter("com.lb.rpc.test.scanner");
+        RpcServiceScanner.doScannerWithRpcServiceAnnotationFilterAndRegistryService("com.lb.rpc.test.scanner");
     }
 
     /**
