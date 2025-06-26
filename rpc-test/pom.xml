@@ -11,5 +11,16 @@
 
     <artifactId>rpc-test</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>rpc-test-scanner</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+        </dependency>
+    </dependencies>
 
 </project>

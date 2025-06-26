@@ -11,4 +11,12 @@
 
     <artifactId>rpc-common</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-annotation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>

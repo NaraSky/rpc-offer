@@ -12,7 +12,6 @@
         <module>rpc-annotation</module>
         <module>rpc-common</module>
         <module>rpc-test</module>
-        <module>rpc-test/rpc-test-scanner</module>
     </modules>
 
     <properties>
@@ -42,24 +41,17 @@
     </properties>
 
     <dependencies>
-        <!-- SLF4J - 替换为slf4j-reload4j，因为slf4j-log4j12已废弃 -->
+        <!-- Logback作为日志实现 -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-reload4j</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>${common.logging}</version>
-        </dependency>
-
-        <!-- Logback作为日志实现 -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
         </dependency>
 
         <!-- Spring -->
