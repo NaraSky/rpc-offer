@@ -13,6 +13,8 @@
         <module>rpc-common</module>
         <module>rpc-test</module>
         <module>rpc-provider</module>
+        <module>rpc-protocol</module>
+        <module>rpc-constants</module>
     </modules>
 
     <properties>
