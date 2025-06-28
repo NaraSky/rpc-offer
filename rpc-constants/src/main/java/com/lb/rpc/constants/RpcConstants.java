@@ -1,6 +1,6 @@
 package com.lb.rpc.constants;
 
-public class RpcConstant {
+public class RpcConstants {
 
     /**
      * 消息头，固定32个字节

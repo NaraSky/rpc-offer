@@ -1,7 +1,7 @@
 package com.lb.rpc.protocol.header;
 
 import com.lb.rpc.common.id.IdFactory;
-import com.lb.rpc.constants.RpcConstant;
+import com.lb.rpc.constants.RpcConstants;
 import com.lb.rpc.protocol.enumeration.RpcType;
 
 public class RpcHeaderFactory {
@@ -9,7 +9,7 @@ public class RpcHeaderFactory {
     public static RpcHeader getRequestHeader(String serializationType) {
         RpcHeader header = new RpcHeader();
         Long requestId = IdFactory.getId();
-        header.setMagic(RpcConstant.MAGIC);
+        header.setMagic(RpcConstants.MAGIC);
         header.setRequestId(requestId);
         header.setMsgType((byte) RpcType.REQUEST.getType());
         header.setStatus((byte) 0x1);

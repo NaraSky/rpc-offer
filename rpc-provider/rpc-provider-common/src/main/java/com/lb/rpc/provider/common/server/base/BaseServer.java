@@ -1,5 +1,7 @@
 package com.lb.rpc.provider.common.server.base;
 
+import com.lb.rpc.codec.RpcDecoder;
+import com.lb.rpc.codec.RpcEncoder;
 import com.lb.rpc.provider.common.handler.RpcProviderHandler;
 import com.lb.rpc.provider.common.server.api.Server;
 import io.netty.bootstrap.ServerBootstrap;
@@ -44,9 +46,8 @@ public class BaseServer implements Server {
                         @Override
                         protected void initChannel(SocketChannel channel) throws Exception {
                             channel.pipeline()
-                                    //TODO 预留编解码，需要实现自定义协议
-                                    .addLast(new StringDecoder())
-                                    .addLast(new StringEncoder())
+                                    .addLast(new RpcDecoder())
+                                    .addLast(new RpcEncoder())
                                     .addLast(new RpcProviderHandler(handlerMap));
                         }
                     })

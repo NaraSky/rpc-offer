@@ -5,12 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lb</groupId>
-        <artifactId>rpc-provider</artifactId>
+        <artifactId>rpc-offer</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.lb.rpc</groupId>
-    <artifactId>rpc-provider-common</artifactId>
+    <artifactId>rpc-codec</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -21,7 +20,12 @@
     <dependencies>
         <dependency>
             <groupId>com.lb</groupId>
-            <artifactId>rpc-codec</artifactId>
+            <artifactId>rpc-protocol</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-serialization-jdk</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
