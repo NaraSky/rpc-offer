@@ -1,5 +1,6 @@
 package com.lb.rpc.consumer.common;
 
+import com.lb.rpc.consumer.common.future.RPCFuture;
 import com.lb.rpc.consumer.common.handler.RpcConsumerHandler;
 import com.lb.rpc.consumer.common.initializer.RpcConsumerInitializer;
 import com.lb.rpc.protocol.RpcProtocol;
@@ -72,7 +73,7 @@ public class RpcConsumer {
      * @param protocol RPC协议对象，包含请求信息
      * @throws Exception 连接或发送过程中的异常
      */
-    public Object sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
+    public RPCFuture sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
         // TODO: 暂时硬编码服务地址，后续引入注册中心时从注册中心获取服务地址
         String serviceAddress = "127.0.0.1";
         int port = 27880;
