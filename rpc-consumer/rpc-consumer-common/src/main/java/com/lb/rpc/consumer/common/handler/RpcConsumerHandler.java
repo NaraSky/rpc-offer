@@ -2,6 +2,7 @@ package com.lb.rpc.consumer.common.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lb.rpc.protocol.RpcProtocol;
+import com.lb.rpc.protocol.header.RpcHeader;
 import com.lb.rpc.protocol.request.RpcRequest;
 import com.lb.rpc.protocol.response.RpcResponse;
 import io.netty.buffer.Unpooled;
@@ -13,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.SocketAddress;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * RPC消费者处理器
@@ -26,6 +29,9 @@ public class RpcConsumerHandler extends SimpleChannelInboundHandler<RpcProtocol<
     private volatile Channel channel;
     // 远程服务提供者的地址信息
     private SocketAddress remotePeer;
+
+    //存储请求ID与RpcResponse协议的映射关系
+    private Map<Long, RpcProtocol<RpcResponse>> pendingResponse = new ConcurrentHashMap<>();
 
     public Channel getChannel() {
         return channel;
@@ -71,13 +77,14 @@ public class RpcConsumerHandler extends SimpleChannelInboundHandler<RpcProtocol<
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcProtocol<RpcResponse> protocol) throws Exception {
-        // 记录接收到的响应数据，用于调试和监控
+        if (protocol == null) {
+            return;
+        }
         logger.info("服务消费者接收到的数据===>>>{}", JSONObject.toJSONString(protocol));
 
-        // TODO: 这里应该添加响应处理逻辑
-        // 1. 根据请求ID匹配对应的请求
-        // 2. 将响应结果返回给调用方
-        // 3. 处理异常响应
+        RpcHeader header = protocol.getHeader();
+        long requestId = header.getRequestId();
+        pendingResponse.put(requestId, protocol);
     }
 
     /**
@@ -85,11 +92,19 @@ public class RpcConsumerHandler extends SimpleChannelInboundHandler<RpcProtocol<
      *
      * @param protocol RPC协议请求对象，包含调用信息
      */
-    public void sendRequest(RpcProtocol<RpcRequest> protocol) {
+    public Object sendRequest(RpcProtocol<RpcRequest> protocol) {
         logger.info("服务消费者发送的数据===>>>{}", JSONObject.toJSONString(protocol));
 
         // 通过Channel发送请求数据，writeAndFlush确保数据立即发送
         channel.writeAndFlush(protocol);
+        RpcHeader header = protocol.getHeader();
+        long requestId = header.getRequestId();
+        while (true) {
+            RpcProtocol<RpcResponse> responseRpcProtocol = pendingResponse.remove(requestId);
+            if (responseRpcProtocol != null) {
+                return responseRpcProtocol.getBody().getResult();
+            }
+        }
     }
 
     /**

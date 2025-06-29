@@ -67,12 +67,12 @@ public class RpcConsumer {
     }
 
     /**
-     * 发送RPC请求到服务提供者
+     * 发送RPC请求到服务提供者, 现在改为返回 Object，意味着要实现同步调用，等待服务提供者的响应并返回结果
      *
      * @param protocol RPC协议对象，包含请求信息
      * @throws Exception 连接或发送过程中的异常
      */
-    public void sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
+    public Object sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
         // TODO: 暂时硬编码服务地址，后续引入注册中心时从注册中心获取服务地址
         String serviceAddress = "127.0.0.1";
         int port = 27880;
@@ -92,7 +92,7 @@ public class RpcConsumer {
             handlerMap.put(key, handler);   // 更新缓存
         }
         // 通过处理器发送请求
-        handler.sendRequest(protocol);
+        return handler.sendRequest(protocol);
     }
 
     /**
