@@ -1,6 +1,7 @@
 package com.lb.rpc.common.scanner.server;
 
 import com.lb.rpc.annotation.RpcService;
+import com.lb.rpc.common.helper.RpcServiceHelper;
 import com.lb.rpc.common.scanner.ClassScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class RpcServiceScanner extends ClassScanner {
                     //TODO 后续逻辑向注册中心注册服务元数据，同时向handlerMap中记录标注了RpcService注解的类实例
                     //handlerMap中的Key先简单存储为serviceName+version+group，后续根据实际情况处理key
                     String serviceName = getServiceName(rpcService);
-                    String key = serviceName.concat(rpcService.version()).concat(rpcService.group());
+                    String key = RpcServiceHelper.buildServiceKey(serviceName, rpcService.version(), rpcService.group());
                     handlerMap.put(key, clazz.newInstance());
                 }
             } catch (Exception e) {
