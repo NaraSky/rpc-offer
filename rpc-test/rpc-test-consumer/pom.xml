@@ -5,24 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lb</groupId>
-        <artifactId>rpc-offer</artifactId>
+        <artifactId>rpc-test</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-test</artifactId>
+    <artifactId>rpc-test-consumer</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>rpc-test-scanner</module>
-        <module>rpc-test-provider</module>
-        <module>rpc-test-consumer</module>
+        <module>rpc-test-consumer-codec</module>
     </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-        </dependency>
-    </dependencies>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 </project>

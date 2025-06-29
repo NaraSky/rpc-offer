@@ -42,10 +42,16 @@
         <hessian.version>4.0.66</hessian.version>
         <kyro.version>5.6.0</kyro.version>
         <fst.version>3.0.4</fst.version>
+        <fastjson.version>2.0.28</fastjson.version>
         <spring.boot.version>3.3.5</spring.boot.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>2.0.28</version>
+        </dependency>
         <!-- Logback作为日志实现 -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
