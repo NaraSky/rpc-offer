@@ -26,13 +26,15 @@ public class BaseServer implements Server {
     protected int port = 27110;
     //存储的是实体类关系
     protected Map<String, Object> handlerMap = new HashMap<>();
+    private String reflectType;
 
-    public BaseServer(String serverAddress) {
-        if (!StringUtils.isEmpty(serverAddress)) {
-            String[] serverAddArray = serverAddress.split(":");
-            this.host = serverAddArray[0];
-            this.port = Integer.parseInt(serverAddArray[1]);
+    public BaseServer(String serverAddress, String reflectType){
+        if (!StringUtils.isEmpty(serverAddress)){
+            String[] serverArray = serverAddress.split(":");
+            this.host = serverArray[0];
+            this.port = Integer.parseInt(serverArray[1]);
         }
+        this.reflectType = reflectType;
     }
 
     @Override
@@ -48,7 +50,7 @@ public class BaseServer implements Server {
                             channel.pipeline()
                                     .addLast(new RpcDecoder())
                                     .addLast(new RpcEncoder())
-                                    .addLast(new RpcProviderHandler(handlerMap));
+                                    .addLast(new RpcProviderHandler(reflectType, handlerMap));
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)

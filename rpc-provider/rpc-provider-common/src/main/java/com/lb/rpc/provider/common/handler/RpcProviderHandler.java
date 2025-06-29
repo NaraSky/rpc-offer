@@ -2,6 +2,7 @@ package com.lb.rpc.provider.common.handler;
 
 import com.lb.rpc.common.helper.RpcServiceHelper;
 import com.lb.rpc.common.threadpool.ServerThreadPool;
+import com.lb.rpc.constants.RpcConstants;
 import com.lb.rpc.protocol.RpcProtocol;
 import com.lb.rpc.protocol.enumeration.RpcStatus;
 import com.lb.rpc.protocol.enumeration.RpcType;
@@ -12,9 +13,12 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import net.sf.cglib.reflect.FastClass;
+import net.sf.cglib.reflect.FastMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -36,7 +40,15 @@ public class RpcProviderHandler extends SimpleChannelInboundHandler<RpcProtocol<
      */
     private final Map<String, Object> handlerMap;
 
-    public RpcProviderHandler(Map<String, Object> handlerMap) {
+    /**
+     * 反射调用类型
+     * 支持JDK原生反射和CGLib FastMethod两种方式
+     * 可通过配置选择不同的反射实现以平衡性能和兼容性
+     */
+    private final String reflectType;
+
+    public RpcProviderHandler(String reflectType, Map<String, Object> handlerMap) {
+        this.reflectType = reflectType;
         this.handlerMap = handlerMap;
     }
 
@@ -153,12 +165,17 @@ public class RpcProviderHandler extends SimpleChannelInboundHandler<RpcProtocol<
 
     /**
      * 通过反射调用目标方法
-     * TODO 目前使用JDK动态代理方式，此处埋点
+     * 支持多种反射实现方式：JDK反射和CGLib FastMethod
+     * <p>
+     * 性能对比：
+     * 1. JDK反射：标准实现，兼容性好，但性能相对较低
+     * 2. CGLib FastMethod：基于字节码生成，性能更高，适合高频调用场景
      * <p>
      * 扩展点说明：
      * 1. 可以在此处添加方法调用拦截器
      * 2. 可以集成AOP框架进行增强处理
      * 3. 可以添加性能监控、限流等功能
+     * 4. 支持更多反射框架如Javassist等
      *
      * @param serviceBean    服务实现对象
      * @param serviceClass   服务实现类
@@ -169,6 +186,74 @@ public class RpcProviderHandler extends SimpleChannelInboundHandler<RpcProtocol<
      * @throws Throwable 方法执行过程中可能抛出的异常
      */
     private Object invokeMethod(Object serviceBean, Class<?> serviceClass, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws Throwable {
+        switch (this.reflectType) {
+            case RpcConstants.REFLECT_TYPE_JDK:
+                return this.invokeJDKMethod(serviceBean, serviceClass, methodName, parameterTypes, parameters);
+            case RpcConstants.REFLECT_TYPE_CGLIB:
+                return this.invokeCGLibMethod(serviceBean, serviceClass, methodName, parameterTypes, parameters);
+            default:
+                throw new IllegalArgumentException("not support reflect type");
+        }
+    }
+
+    /**
+     * 使用CGLib FastMethod进行方法调用
+     * <p>
+     * CGLib FastMethod原理：
+     * 1. 动态生成字节码，避免了传统反射的性能开销
+     * 2. 将方法调用转换为直接的方法调用，接近原生方法调用性能
+     * 3. 适合高频调用的场景，如RPC服务调用
+     * <p>
+     * 性能优势：
+     * - 比JDK反射快约10-50倍（取决于调用频率）
+     * - 减少了反射调用的开销
+     * - 更少的GC压力
+     *
+     * @param serviceBean    服务实现对象
+     * @param serviceClass   服务实现类
+     * @param methodName     方法名
+     * @param parameterTypes 参数类型数组
+     * @param parameters     参数值数组
+     * @return 方法执行结果
+     * @throws InvocationTargetException 方法调用异常
+     */
+    private Object invokeCGLibMethod(Object serviceBean, Class<?> serviceClass, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws InvocationTargetException {
+        logger.info("use cglib reflect type invoke method...");
+        // 创建FastClass，CGLib会为目标类生成一个FastClass子类
+        // FastClass包含了原类所有方法的索引，可以通过索引快速调用方法
+        FastClass serviceFastClass = FastClass.create(serviceClass);
+        // 获取FastMethod，这是对原方法的高性能包装
+        // 内部会生成字节码，将反射调用转换为直接方法调用
+        FastMethod serviceFastMethod = serviceFastClass.getMethod(methodName, parameterTypes);
+        return serviceFastMethod.invoke(serviceBean, parameters);
+    }
+
+
+    /**
+     * 使用JDK原生反射进行方法调用
+     * <p>
+     * JDK反射特点：
+     * 1. Java标准API，兼容性最好
+     * 2. 功能完整，支持所有反射特性
+     * 3. 性能相对较低，但对于低频调用足够
+     * <p>
+     * 适用场景：
+     * - 对性能要求不高的场景
+     * - 需要最大兼容性的场景
+     * - 调用频率较低的场景
+     *
+     * @param serviceBean    服务实现对象
+     * @param serviceClass   服务实现类
+     * @param methodName     方法名
+     * @param parameterTypes 参数类型数组
+     * @param parameters     参数值数组
+     * @return 方法执行结果
+     * @throws InvocationTargetException 方法调用异常
+     * @throws IllegalAccessException    访问权限异常
+     * @throws NoSuchMethodException     方法不存在异常
+     */
+    private Object invokeJDKMethod(Object serviceBean, Class<?> serviceClass, String methodName, Class<?>[] parameterTypes, Object[] parameters) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        logger.info("use jdk reflect type invoke method...");
         Method method = serviceClass.getMethod(methodName, parameterTypes);
         method.setAccessible(true);
         return method.invoke(serviceBean, parameters);
