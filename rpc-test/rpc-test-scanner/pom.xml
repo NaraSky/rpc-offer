@@ -13,8 +13,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.lb</groupId>
-            <artifactId>rpc-common</artifactId>
+            <groupId>com.lb.rpc</groupId>
+            <artifactId>rpc-provider-common</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
