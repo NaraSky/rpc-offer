@@ -92,8 +92,8 @@ public class RpcConsumer {
             handler = getRpcConsumerHandler(serviceAddress, port); // 创建新连接
             handlerMap.put(key, handler);   // 更新缓存
         }
-        // 通过处理器发送请求
-        return handler.sendRequest(protocol);
+        RpcRequest request = protocol.getBody();
+        return handler.sendRequest(protocol, request.getAsync(), request.getOneway());
     }
 
     /**
