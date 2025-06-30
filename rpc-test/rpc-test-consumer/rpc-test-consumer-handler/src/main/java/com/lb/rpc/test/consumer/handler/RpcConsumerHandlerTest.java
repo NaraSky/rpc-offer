@@ -1,12 +1,12 @@
 package com.lb.rpc.test.consumer.handler;
 
 import com.lb.rpc.consumer.common.RpcConsumer;
-import com.lb.rpc.consumer.common.callback.AsyncRPCCallback;
 import com.lb.rpc.consumer.common.context.RpcContext;
-import com.lb.rpc.consumer.common.future.RPCFuture;
 import com.lb.rpc.protocol.RpcProtocol;
 import com.lb.rpc.protocol.header.RpcHeaderFactory;
 import com.lb.rpc.protocol.request.RpcRequest;
+import com.lb.rpc.proxy.api.callback.AsyncRPCCallback;
+import com.lb.rpc.proxy.api.future.RPCFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

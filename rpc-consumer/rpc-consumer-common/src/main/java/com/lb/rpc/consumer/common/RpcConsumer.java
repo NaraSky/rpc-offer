@@ -1,11 +1,12 @@
 package com.lb.rpc.consumer.common;
 
 import com.lb.rpc.common.threadpool.ClientThreadPool;
-import com.lb.rpc.consumer.common.future.RPCFuture;
 import com.lb.rpc.consumer.common.handler.RpcConsumerHandler;
 import com.lb.rpc.consumer.common.initializer.RpcConsumerInitializer;
 import com.lb.rpc.protocol.RpcProtocol;
 import com.lb.rpc.protocol.request.RpcRequest;
+import com.lb.rpc.proxy.api.consumer.Consumer;
+import com.lb.rpc.proxy.api.future.RPCFuture;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 负责与RPC服务提供者建立连接，发送请求并接收响应
  * 采用单例模式，支持连接复用和管理
  */
-public class RpcConsumer {
+public class RpcConsumer implements Consumer {
     private final Logger logger = LoggerFactory.getLogger(RpcConsumer.class);
 
     // Netty客户端启动器，用于配置和启动客户端
@@ -75,6 +76,7 @@ public class RpcConsumer {
      * @param protocol RPC协议对象，包含请求信息
      * @throws Exception 连接或发送过程中的异常
      */
+    @Override
     public RPCFuture sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
         // TODO: 暂时硬编码服务地址，后续引入注册中心时从注册中心获取服务地址
         String serviceAddress = "127.0.0.1";

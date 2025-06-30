@@ -1,6 +1,7 @@
 package com.lb.rpc.consumer.common.context;
 
-import com.lb.rpc.consumer.common.future.RPCFuture;
+
+import com.lb.rpc.proxy.api.future.RPCFuture;
 
 public class RpcContext {
     public RpcContext() {

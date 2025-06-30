@@ -1,4 +1,4 @@
-package com.lb.rpc.consumer.common.callback;
+package com.lb.rpc.proxy.api.callback;
 
 public interface AsyncRPCCallback {
 

@@ -1,10 +1,10 @@
-package com.lb.rpc.consumer.common.future;
+package com.lb.rpc.proxy.api.future;
 
 import com.lb.rpc.common.threadpool.ClientThreadPool;
-import com.lb.rpc.consumer.common.callback.AsyncRPCCallback;
 import com.lb.rpc.protocol.RpcProtocol;
 import com.lb.rpc.protocol.request.RpcRequest;
 import com.lb.rpc.protocol.response.RpcResponse;
+import com.lb.rpc.proxy.api.callback.AsyncRPCCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
