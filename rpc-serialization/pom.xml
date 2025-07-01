@@ -18,6 +18,7 @@
         <module>rpc-serialization-hessian2</module>
         <module>rpc-serialization-fst</module>
         <module>rpc-serialization-kryo</module>
+        <module>rpc-serialization-protostuff</module>
     </modules>
 
     <properties>
