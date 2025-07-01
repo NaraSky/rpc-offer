@@ -28,6 +28,11 @@
             <artifactId>rpc-registry-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

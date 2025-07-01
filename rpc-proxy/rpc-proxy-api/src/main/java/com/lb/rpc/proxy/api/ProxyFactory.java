@@ -1,7 +1,9 @@
 package com.lb.rpc.proxy.api;
 
 import com.lb.rpc.proxy.api.config.ProxyConfig;
+import com.lb.rpc.spi.annotation.SPI;
 
+@SPI
 public interface ProxyFactory {
 
     /**
