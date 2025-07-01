@@ -1,12 +1,16 @@
 package com.lb.rpc.consumer.common;
 
+import com.lb.rpc.common.helper.RpcServiceHelper;
 import com.lb.rpc.common.threadpool.ClientThreadPool;
 import com.lb.rpc.consumer.common.handler.RpcConsumerHandler;
+import com.lb.rpc.consumer.common.handler.RpcConsumerHandlerHelper;
 import com.lb.rpc.consumer.common.initializer.RpcConsumerInitializer;
 import com.lb.rpc.protocol.RpcProtocol;
+import com.lb.rpc.protocol.meta.ServiceMeta;
 import com.lb.rpc.protocol.request.RpcRequest;
 import com.lb.rpc.proxy.api.consumer.Consumer;
 import com.lb.rpc.proxy.api.future.RPCFuture;
+import com.lb.rpc.registry.api.RegistryService;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -66,6 +70,7 @@ public class RpcConsumer implements Consumer {
      * 优雅关闭事件循环组，等待所有任务完成
      */
     public void close() {
+        RpcConsumerHandlerHelper.closeRpcClientHandler();
         eventLoopGroup.shutdownGracefully();
         ClientThreadPool.shutdown();
     }
@@ -77,27 +82,21 @@ public class RpcConsumer implements Consumer {
      * @throws Exception 连接或发送过程中的异常
      */
     @Override
-    public RPCFuture sendRequest(RpcProtocol<RpcRequest> protocol) throws Exception {
-        // TODO: 暂时硬编码服务地址，后续引入注册中心时从注册中心获取服务地址
-        String serviceAddress = "127.0.0.1";
-        int port = 27880;
-
-        // 构造连接键，格式为"ip_port"
-        String key = serviceAddress.concat("_").concat(String.valueOf(port));
-
-        // 从缓存中获取连接处理器
-        RpcConsumerHandler handler = handlerMap.get(key);
-        // 如果缓存中没有对应的处理器，创建新的连接
-        if (handler == null) {
-            handler = getRpcConsumerHandler(serviceAddress, port);
-            handlerMap.put(key, handler);
-        } else if (!handler.getChannel().isActive()) {  // 如果缓存中存在处理器但连接不活跃，重新创建连接
-            handler.close();     // 关闭旧连接
-            handler = getRpcConsumerHandler(serviceAddress, port); // 创建新连接
-            handlerMap.put(key, handler);   // 更新缓存
-        }
+    public RPCFuture sendRequest(RpcProtocol<RpcRequest> protocol, RegistryService registryService) throws Exception {
         RpcRequest request = protocol.getBody();
-        return handler.sendRequest(protocol, request.getAsync(), request.getOneway());
+        String serviceKey = RpcServiceHelper.buildServiceKey(request.getClassName(), request.getVersion(), request.getGroup());
+        Object[] params = request.getParameters();
+        int invokerHashCode = (params == null || params.length <= 0) ? serviceKey.hashCode() : params[0].hashCode();
+        ServiceMeta serviceMeta = registryService.discovery(serviceKey, invokerHashCode);
+        if (serviceMeta != null) {
+            RpcConsumerHandler handler = RpcConsumerHandlerHelper.get(serviceMeta);
+            if (handler == null || handler.getChannel() == null || !handler.getChannel().isActive()) {
+                handler = getRpcConsumerHandler(serviceMeta.getServiceAddr(), serviceMeta.getServicePort());
+                RpcConsumerHandlerHelper.put(serviceMeta, handler);
+            }
+            return handler.sendRequest(protocol, request.getAsync(), request.getOneway());
+        }
+        return null;
     }
 
     /**
@@ -109,6 +108,7 @@ public class RpcConsumer implements Consumer {
      * @throws InterruptedException 连接过程被中断时抛出
      */
     private RpcConsumerHandler getRpcConsumerHandler(String serviceAddress, int port) throws InterruptedException {
+        System.out.println("【客户端】即将连接服务端：" + serviceAddress + ":" + port);
         // 发起连接并同步等待连接完成
         ChannelFuture channelFuture = bootstrap.connect(serviceAddress, port).sync();
 

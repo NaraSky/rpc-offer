@@ -31,15 +31,14 @@ public class RpcServiceScanner extends ClassScanner {
                 Class<?> clazz = Class.forName(className);
                 RpcService rpcService = clazz.getAnnotation(RpcService.class);
                 if (rpcService != null) {
-                    //优先使用interfaceClass, interfaceClass的name为空，再使用interfaceClassNam
                     ServiceMeta serviceMeta = new ServiceMeta(getServiceName(rpcService), rpcService.version(), rpcService.group(), host, port);
-                    //将元数据注册到注册中心
                     registryService.register(serviceMeta);
-                    handlerMap.put(RpcServiceHelper.buildServiceKey(
-                                    serviceMeta.getServiceName(),
-                                    serviceMeta.getServiceVersion(),
-                                    serviceMeta.getServiceGroup()),
-                            clazz.newInstance());
+                    String key = RpcServiceHelper.buildServiceKey(
+                            serviceMeta.getServiceName(),
+                            serviceMeta.getServiceVersion(),
+                            serviceMeta.getServiceGroup());
+                    handlerMap.put(key, clazz.newInstance());
+                    LOGGER.info("注册服务: key={}, impl={}", key, clazz.getName());
                 }
             } catch (Exception e) {
                 LOGGER.error("scan classes throws exception: {}", e);

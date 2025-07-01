@@ -14,6 +14,7 @@ public class ProviderDemoServiceImpl implements DemoService {
 
     @Override
     public String hello(String name) {
+        System.out.println("【服务端】调用hello方法，参数：" + name);
         logger.info("调用hello方法传入的参数为===>>>{}", name);
         return "hello " + name;
     }

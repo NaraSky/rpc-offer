@@ -66,6 +66,8 @@ public class RpcProviderHandler extends SimpleChannelInboundHandler<RpcProtocol<
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcProtocol<RpcRequest> protocol) throws Exception {
+        System.out.println("【服务端】收到RPC请求：" + protocol);
+        logger.info("收到RPC请求: {}", protocol);
         // 将请求处理逻辑提交到线程池，避免阻塞Netty的EventLoop线程
         // 这是Netty最佳实践：耗时操作应该异步执行，保持EventLoop的高效运转
         ServerThreadPool.submit(() -> {
@@ -125,9 +127,9 @@ public class RpcProviderHandler extends SimpleChannelInboundHandler<RpcProtocol<
      * @throws Throwable 方法执行过程中可能抛出的异常
      */
     private Object handle(RpcRequest request) throws Throwable {
-        // 构建服务标识key，格式为：className:version:group
         String serviceKey = RpcServiceHelper.buildServiceKey(request.getClassName(), request.getVersion(), request.getGroup());
-
+        logger.info("handlerMap keys: {}", handlerMap.keySet());
+        logger.info("请求key: {}", serviceKey);
         // 从服务映射表中获取服务实现对象
         Object serviceBean = handlerMap.get(serviceKey);
         if (serviceBean == null) {
