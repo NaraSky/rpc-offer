@@ -14,6 +14,7 @@
     <modules>
         <module>rpc-serialization-api</module>
         <module>rpc-serialization-jdk</module>
+        <module>rpc-serialization-json</module>
     </modules>
 
     <properties>

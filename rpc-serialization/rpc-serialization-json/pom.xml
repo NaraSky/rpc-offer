@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lb</groupId>
-        <artifactId>rpc-offer</artifactId>
+        <artifactId>rpc-serialization</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-codec</artifactId>
+    <artifactId>rpc-serialization-json</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -19,18 +19,18 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.lb</groupId>
-            <artifactId>rpc-protocol</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.lb</groupId>
-            <artifactId>rpc-serialization-jdk</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lb</groupId>
-            <artifactId>rpc-serialization-json</artifactId>
+            <artifactId>rpc-serialization-api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
