@@ -33,6 +33,11 @@
             <artifactId>rpc-serialization-json</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-serialization-hessian2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
