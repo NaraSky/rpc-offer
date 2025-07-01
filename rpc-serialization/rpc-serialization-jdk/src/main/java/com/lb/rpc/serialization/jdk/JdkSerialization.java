@@ -2,6 +2,9 @@ package com.lb.rpc.serialization.jdk;
 
 import com.lb.rpc.common.exception.SerializerException;
 import com.lb.rpc.serialization.api.Serialization;
+import com.lb.rpc.spi.annotation.SPIClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -10,7 +13,10 @@ import java.io.*;
  * 基于Java原生序列化机制实现对象的序列化和反序列化
  * 注意：被序列化的对象必须实现Serializable接口
  */
+@SPIClass
 public class JdkSerialization implements Serialization {
+
+    private final Logger logger = LoggerFactory.getLogger(JdkSerialization.class);
 
     /**
      * 序列化方法：将对象转换为字节数组
@@ -22,6 +28,7 @@ public class JdkSerialization implements Serialization {
      */
     @Override
     public <T> byte[] serialize(T obj) {
+        logger.info("execute jdk serialize...");
         // 空对象检查：确保传入的对象不为null
         if (obj == null) {
             throw new SerializerException("serialize object is null");
@@ -55,6 +62,7 @@ public class JdkSerialization implements Serialization {
      */
     @Override
     public <T> T deserialize(byte[] data, Class<T> cls) {
+        logger.info("execute jdk deserialize...");
         // 空数据检查：确保传入的字节数组不为null
         if (data == null) {
             throw new SerializerException("deserialize data is null");

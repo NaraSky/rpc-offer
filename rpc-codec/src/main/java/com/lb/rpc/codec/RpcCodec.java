@@ -1,7 +1,7 @@
 package com.lb.rpc.codec;
 
 import com.lb.rpc.serialization.api.Serialization;
-import com.lb.rpc.serialization.jdk.JdkSerialization;
+import com.lb.rpc.spi.loader.ExtensionLoader;
 
 /**
  * RPC编解码器接口
@@ -9,8 +9,8 @@ import com.lb.rpc.serialization.jdk.JdkSerialization;
  */
 public interface RpcCodec {
 
-    default Serialization getJdkSerialization(){
-        return new JdkSerialization();
+    default Serialization getSerialization(String serializationType) {
+        return ExtensionLoader.getExtension(Serialization.class, serializationType);
     }
 
 }

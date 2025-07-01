@@ -1,5 +1,9 @@
 package com.lb.rpc.serialization.api;
 
+import com.lb.rpc.constants.RpcConstants;
+import com.lb.rpc.spi.annotation.SPI;
+
+@SPI(RpcConstants.SERIALIZATION_JDK)
 public interface Serialization {
 
     /**

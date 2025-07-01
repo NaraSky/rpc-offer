@@ -37,7 +37,7 @@ public class RpcEncoder extends MessageToByteEncoder<RpcProtocol<Object>> implem
         // 获取序列化类型
         String serializationType = header.getSerializationType();
         //TODO Serialization是扩展点 - 未来可支持多种序列化方式
-        Serialization serialization = getJdkSerialization();
+        Serialization serialization = getSerialization(serializationType);
         // 写入序列化类型字符串（固定长度，UTF-8编码）
         byteBuf.writeBytes(SerializationUtils.paddingString(serializationType).getBytes("UTF-8"));
         // 序列化消息体
