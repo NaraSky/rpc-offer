@@ -46,7 +46,7 @@
         <javassist.version>3.30.2-GA</javassist.version>
         <hessian.version>4.0.66</hessian.version>
         <kyro.version>5.6.0</kyro.version>
-        <fst.version>3.0.4</fst.version>
+        <fst.version>2.57</fst.version>
         <fastjson.version>2.0.28</fastjson.version>
         <spring.boot.version>3.3.5</spring.boot.version>
     </properties>
