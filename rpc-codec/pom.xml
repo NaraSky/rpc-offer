@@ -43,6 +43,11 @@
             <artifactId>rpc-serialization-fst</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-serialization-kryo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

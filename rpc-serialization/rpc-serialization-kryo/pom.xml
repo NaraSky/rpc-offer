@@ -5,25 +5,29 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lb</groupId>
-        <artifactId>rpc-offer</artifactId>
+        <artifactId>rpc-serialization</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-serialization</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>rpc-serialization-api</module>
-        <module>rpc-serialization-jdk</module>
-        <module>rpc-serialization-json</module>
-        <module>rpc-serialization-hessian2</module>
-        <module>rpc-serialization-fst</module>
-        <module>rpc-serialization-kryo</module>
-    </modules>
+    <artifactId>rpc-serialization-kryo</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo</artifactId>
+            <version>${kyro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-serialization-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

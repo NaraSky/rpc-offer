@@ -1,0 +1,1 @@
+kryo=com.lb.rpc.serialization.kryo.KryoSerialization
