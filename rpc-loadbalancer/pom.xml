@@ -5,29 +5,21 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lb</groupId>
-        <artifactId>rpc-registry</artifactId>
+        <artifactId>rpc-offer</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-registry-api</artifactId>
+    <artifactId>rpc-loadbalancer</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>rpc-loadbalancer-api</module>
+        <module>rpc-loadbalancer-random</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.lb</groupId>
-            <artifactId>rpc-protocol</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lb</groupId>
-            <artifactId>rpc-loadbalancer-random</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 
 </project>

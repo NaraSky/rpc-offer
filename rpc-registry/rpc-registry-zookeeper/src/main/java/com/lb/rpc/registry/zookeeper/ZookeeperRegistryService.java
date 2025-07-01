@@ -1,6 +1,8 @@
 package com.lb.rpc.registry.zookeeper;
 
 import com.lb.rpc.common.helper.RpcServiceHelper;
+import com.lb.rpc.loadbalancer.api.ServiceLoadBalancer;
+import com.lb.rpc.loadbalancer.random.RandomServiceLoadBalancer;
 import com.lb.rpc.protocol.meta.ServiceMeta;
 import com.lb.rpc.registry.api.RegistryService;
 import com.lb.rpc.registry.api.config.RegistryConfig;
@@ -41,6 +43,9 @@ public class ZookeeperRegistryService implements RegistryService {
      */
     private ServiceDiscovery<ServiceMeta> serviceDiscovery;
 
+    //负载均衡接口
+    private ServiceLoadBalancer<ServiceInstance<ServiceMeta>> serviceLoadBalancer;
+
     /**
      * 初始化Zookeeper注册中心
      *
@@ -63,6 +68,8 @@ public class ZookeeperRegistryService implements RegistryService {
                 .serializer(serializer)     // 设置序列化器
                 .build();
         serviceDiscovery.start();
+        //TODO 默认创建基于随机算法的负载均衡策略，后续基于SPI扩展
+        this.serviceLoadBalancer = new RandomServiceLoadBalancer<ServiceInstance<ServiceMeta>>();
     }
 
     @Override
@@ -102,20 +109,11 @@ public class ZookeeperRegistryService implements RegistryService {
         // 从Zookeeper查询指定服务名的所有实例
         Collection<ServiceInstance<ServiceMeta>> serviceInstances = serviceDiscovery.queryForInstances(serviceName);
         // 从多个实例中选择一个 (负载均衡)
-        ServiceInstance<ServiceMeta> instance = this.selectOneServiceInstance((List<ServiceInstance<ServiceMeta>>) serviceInstances);
+        ServiceInstance<ServiceMeta> instance = serviceLoadBalancer.select((List<ServiceInstance<ServiceMeta>>) serviceInstances, invokerHashCode);
         if (instance == null) {
             return null;
         }
         return instance.getPayload();
-    }
-
-    private ServiceInstance<ServiceMeta> selectOneServiceInstance(List<ServiceInstance<ServiceMeta>> serviceInstances) {
-        if (serviceInstances == null || serviceInstances.isEmpty()) {
-            return null;
-        }
-        Random random = new Random();
-        int index = random.nextInt(serviceInstances.size());
-        return serviceInstances.get(index);
     }
 
     @Override
