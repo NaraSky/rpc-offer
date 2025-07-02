@@ -1,4 +1,4 @@
-package com.lb.rpc.loadbalancer.robin;
+package com.lb.rpc.loadbalancer.robin.weight;
 
 import com.lb.rpc.loadbalancer.api.ServiceLoadBalancer;
 import com.lb.rpc.spi.annotation.SPIClass;
@@ -9,17 +9,21 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SPIClass
-public class RobinServiceLoadBalancer<T> implements ServiceLoadBalancer<T> {
-    private final Logger logger = LoggerFactory.getLogger(RobinServiceLoadBalancer.class);
+public class RobinWeightServiceLoadBalancer<T> implements ServiceLoadBalancer<T> {
+    private final Logger logger = LoggerFactory.getLogger(RobinWeightServiceLoadBalancer.class);
     private volatile AtomicInteger atomicInteger = new AtomicInteger(0);
 
     @Override
     public T select(List<T> servers, int hashCode) {
-        logger.info("基于轮询算法的负载均衡策略...");
+        logger.info("基于加权轮询算法的负载均衡策略...");
         if (servers == null || servers.isEmpty()) {
             return null;
         }
-        int count = servers.size();
+        hashCode = Math.abs(hashCode);
+        int count = hashCode % servers.size();
+        if (count <= 0) {
+            count = servers.size();
+        }
         int index = atomicInteger.incrementAndGet();
         if (index >= Integer.MAX_VALUE - 10000) {
             atomicInteger.set(0);
