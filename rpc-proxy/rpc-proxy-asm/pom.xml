@@ -5,20 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lb</groupId>
-        <artifactId>rpc-offer</artifactId>
+        <artifactId>rpc-proxy</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-proxy</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>rpc-proxy-jdk</module>
-        <module>rpc-proxy-api</module>
-        <module>rpc-proxy-cglib</module>
-        <module>rpc-proxy-javassist</module>
-        <module>rpc-proxy-bytebuddy</module>
-        <module>rpc-proxy-asm</module>
-    </modules>
+    <artifactId>rpc-proxy-asm</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -26,4 +17,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-proxy-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>
