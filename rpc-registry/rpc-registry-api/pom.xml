@@ -63,6 +63,11 @@
             <artifactId>rpc-loadbalancer-sourceip-hash-weight</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-loadbalancer-consistenthash-zk</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

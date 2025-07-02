@@ -21,6 +21,7 @@
         <module>rpc-loadbalancer-hash-weight</module>
         <module>rpc-loadbalancer-sourceip-hash</module>
         <module>rpc-loadbalancer-sourceip-hash-weight</module>
+        <module>rpc-loadbalancer-consistenthash-zk</module>
     </modules>
 
     <properties>
