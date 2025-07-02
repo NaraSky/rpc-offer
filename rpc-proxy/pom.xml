@@ -14,6 +14,7 @@
     <modules>
         <module>rpc-proxy-jdk</module>
         <module>rpc-proxy-api</module>
+        <module>rpc-proxy-cglib</module>
     </modules>
 
     <properties>

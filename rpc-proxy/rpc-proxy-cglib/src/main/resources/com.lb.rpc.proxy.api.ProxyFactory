@@ -1,0 +1,1 @@
+cglib=com.lb.rpc.proxy.cglib.CglibProxyFactory
