@@ -106,11 +106,11 @@ public class ZookeeperRegistryService implements RegistryService {
      * @throws Exception 发现异常
      */
     @Override
-    public ServiceMeta discovery(String serviceName, int invokerHashCode) throws Exception {
+    public ServiceMeta discovery(String serviceName, int invokerHashCode, String sourceIp) throws Exception {
         // 从Zookeeper查询指定服务名的所有实例
         Collection<ServiceInstance<ServiceMeta>> serviceInstances = serviceDiscovery.queryForInstances(serviceName);
         // 从多个实例中选择一个 (负载均衡)
-        ServiceInstance<ServiceMeta> instance = serviceLoadBalancer.select((List<ServiceInstance<ServiceMeta>>) serviceInstances, invokerHashCode);
+        ServiceInstance<ServiceMeta> instance = serviceLoadBalancer.select((List<ServiceInstance<ServiceMeta>>) serviceInstances, invokerHashCode, sourceIp);
         if (instance == null) {
             return null;
         }

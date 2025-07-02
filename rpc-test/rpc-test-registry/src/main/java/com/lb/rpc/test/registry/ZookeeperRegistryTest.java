@@ -35,7 +35,8 @@ public class ZookeeperRegistryTest {
 
     @Test
     public void testDiscovery() throws Exception {
-        this.registryService.discovery(RegistryService.class.getName(), "zhiyu".hashCode());
+        // this.registryService.discovery(RegistryService.class.getName(), "zhiyu".hashCode());
+        this.registryService.discovery(RegistryService.class.getName(), "zhiyu".hashCode(), "127.0.0.1");
     }
 
     @Test

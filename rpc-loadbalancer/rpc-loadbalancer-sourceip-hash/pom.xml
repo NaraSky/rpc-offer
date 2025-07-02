@@ -5,27 +5,24 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.lb</groupId>
-        <artifactId>rpc-offer</artifactId>
+        <artifactId>rpc-loadbalancer</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rpc-loadbalancer</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>rpc-loadbalancer-api</module>
-        <module>rpc-loadbalancer-random</module>
-        <module>rpc-loadbalancer-random-weight</module>
-        <module>rpc-loadbalancer-round-robin</module>
-        <module>rpc-loadbalancer-round-robin-weight</module>
-        <module>rpc-loadbalancer-hash</module>
-        <module>rpc-loadbalancer-hash-weight</module>
-        <module>rpc-loadbalancer-sourceip-hash</module>
-    </modules>
+    <artifactId>rpc-loadbalancer-sourceip-hash</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-loadbalancer-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

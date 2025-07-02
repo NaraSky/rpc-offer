@@ -41,7 +41,8 @@ public class RpcConsumerNativeTest {
         // rpcClient = new RpcClient("127.0.0.1:2181", "zookeeper", "robin","asm","1.0.0", "zhiyu", "protostuff", 3000, false, false);
         // rpcClient = new RpcClient("127.0.0.1:2181", "zookeeper", "robinweight","asm","1.0.0", "zhiyu", "protostuff", 3000, false, false);
         // rpcClient = new RpcClient("127.0.0.1:2181", "zookeeper", "hash","asm","1.0.0", "zhiyu", "protostuff", 3000, false, false);
-        rpcClient = new RpcClient("127.0.0.1:2181", "zookeeper", "hashweight","asm","1.0.0", "zhiyu", "protostuff", 3000, false, false);
+        // rpcClient = new RpcClient("127.0.0.1:2181", "zookeeper", "hashweight","asm","1.0.0", "zhiyu", "protostuff", 3000, false, false);
+        rpcClient = new RpcClient("127.0.0.1:2181", "zookeeper", "iphash","asm","1.0.0", "zhiyu", "protostuff", 3000, false, false);
     }
 
     @Test

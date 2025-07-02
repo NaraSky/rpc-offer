@@ -1,6 +1,7 @@
 package com.lb.rpc.consumer.common;
 
 import com.lb.rpc.common.helper.RpcServiceHelper;
+import com.lb.rpc.common.ip.IpUtils;
 import com.lb.rpc.common.threadpool.ClientThreadPool;
 import com.lb.rpc.consumer.common.handler.RpcConsumerHandler;
 import com.lb.rpc.consumer.common.handler.RpcConsumerHandlerHelper;
@@ -37,6 +38,8 @@ public class RpcConsumer implements Consumer {
     // Netty事件循环组，处理网络事件
     private final EventLoopGroup eventLoopGroup;
 
+    private final String localIp;
+
     // 单例实例，使用volatile保证可见性
     private static volatile RpcConsumer instance;
 
@@ -45,6 +48,7 @@ public class RpcConsumer implements Consumer {
     private static Map<String, RpcConsumerHandler> handlerMap = new ConcurrentHashMap<>();
 
     private RpcConsumer() {
+        localIp = IpUtils.getLocalHostIp();
         bootstrap = new Bootstrap();
         // 创建NIO事件循环组，线程数为
         eventLoopGroup = new NioEventLoopGroup(4);
@@ -87,7 +91,7 @@ public class RpcConsumer implements Consumer {
         String serviceKey = RpcServiceHelper.buildServiceKey(request.getClassName(), request.getVersion(), request.getGroup());
         Object[] params = request.getParameters();
         int invokerHashCode = (params == null || params.length <= 0) ? serviceKey.hashCode() : params[0].hashCode();
-        ServiceMeta serviceMeta = registryService.discovery(serviceKey, invokerHashCode);
+        ServiceMeta serviceMeta = registryService.discovery(serviceKey, invokerHashCode, localIp);
         if (serviceMeta != null) {
             RpcConsumerHandler handler = RpcConsumerHandlerHelper.get(serviceMeta);
             if (handler == null || handler.getChannel() == null || !handler.getChannel().isActive()) {

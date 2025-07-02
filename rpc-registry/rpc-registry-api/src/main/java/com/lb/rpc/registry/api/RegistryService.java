@@ -17,14 +17,14 @@ public interface RegistryService {
 
     /**
      * 服务发现
-     * 根据服务名称从注册中心查找可用的服务实例
      *
      * @param serviceName     服务名称
-     * @param invokerHashCode 调用方hash码，可用于负载均衡
-     * @return 服务元数据信息
-     * @throws Exception 发现异常
+     * @param invokerHashCode HashCode值
+     * @param sourceIp        源IP地址
+     * @return 服务元数据
+     * @throws Exception 抛出异常
      */
-    ServiceMeta discovery(String serviceName, int invokerHashCode) throws Exception;
+    ServiceMeta discovery(String serviceName, int invokerHashCode, String sourceIp) throws Exception;
 
     void destroy() throws IOException;
 
