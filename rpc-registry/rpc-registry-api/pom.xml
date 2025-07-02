@@ -58,6 +58,11 @@
             <artifactId>rpc-loadbalancer-sourceip-hash</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-loadbalancer-sourceip-hash-weight</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
