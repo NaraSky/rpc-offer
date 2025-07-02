@@ -15,6 +15,7 @@
         <module>rpc-loadbalancer-api</module>
         <module>rpc-loadbalancer-random</module>
         <module>rpc-loadbalancer-random-weight</module>
+        <module>rpc-loadbalancer-round-robin</module>
     </modules>
 
     <properties>
