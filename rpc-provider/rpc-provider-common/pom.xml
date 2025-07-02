@@ -34,6 +34,11 @@
             <artifactId>rpc-reflect-jdk</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-reflect-cglib</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
