@@ -23,6 +23,7 @@
         <module>rpc-loadbalancer</module>
         <module>rpc-spi</module>
         <module>rpc-reflect</module>
+        <module>rpc-reflect/rpc-reflect-javassist</module>
     </modules>
 
     <properties>
