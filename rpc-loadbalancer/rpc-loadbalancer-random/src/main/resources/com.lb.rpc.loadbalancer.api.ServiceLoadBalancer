@@ -1,0 +1,1 @@
+random=com.lb.rpc.loadbalancer.random.RandomServiceLoadBalancer
