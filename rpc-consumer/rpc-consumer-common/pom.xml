@@ -40,6 +40,11 @@
         </dependency>
         <dependency>
             <groupId>com.lb</groupId>
+            <artifactId>rpc-proxy-bytebuddy</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
             <artifactId>rpc-registry-zookeeper</artifactId>
             <version>${project.version}</version>
         </dependency>
