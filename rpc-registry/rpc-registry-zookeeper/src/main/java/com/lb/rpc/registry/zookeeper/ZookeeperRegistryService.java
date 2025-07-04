@@ -1,7 +1,9 @@
 package com.lb.rpc.registry.zookeeper;
 
 import com.lb.rpc.common.helper.RpcServiceHelper;
+import com.lb.rpc.constants.RpcConstants;
 import com.lb.rpc.loadbalancer.api.ServiceLoadBalancer;
+import com.lb.rpc.loadbalancer.helper.ServiceLoadBalancerHelper;
 import com.lb.rpc.protocol.meta.ServiceMeta;
 import com.lb.rpc.registry.api.RegistryService;
 import com.lb.rpc.registry.api.config.RegistryConfig;
@@ -45,6 +47,8 @@ public class ZookeeperRegistryService implements RegistryService {
     //负载均衡接口
     private ServiceLoadBalancer<ServiceInstance<ServiceMeta>> serviceLoadBalancer;
 
+    private ServiceLoadBalancer<ServiceMeta> serviceEnhancedLoadBalancer;
+
     /**
      * 初始化Zookeeper注册中心
      *
@@ -67,8 +71,12 @@ public class ZookeeperRegistryService implements RegistryService {
                 .serializer(serializer)     // 设置序列化器
                 .build();
         serviceDiscovery.start();
-        //TODO 默认创建基于随机算法的负载均衡策略，后续基于SPI扩展
-        this.serviceLoadBalancer = ExtensionLoader.getExtension(ServiceLoadBalancer.class, registryConfig.getRegistryLoadBalanceType());
+        //增强型负载均衡策略
+        if (registryConfig.getRegistryLoadBalanceType().toLowerCase().contains(RpcConstants.SERVICE_ENHANCED_LOAD_BALANCER_PREFIX)) {
+            this.serviceEnhancedLoadBalancer = ExtensionLoader.getExtension(ServiceLoadBalancer.class, registryConfig.getRegistryLoadBalanceType());
+        } else {
+            this.serviceLoadBalancer = ExtensionLoader.getExtension(ServiceLoadBalancer.class, registryConfig.getRegistryLoadBalanceType());
+        }
     }
 
     @Override
@@ -107,12 +115,18 @@ public class ZookeeperRegistryService implements RegistryService {
     public ServiceMeta discovery(String serviceName, int invokerHashCode, String sourceIp) throws Exception {
         // 从Zookeeper查询指定服务名的所有实例
         Collection<ServiceInstance<ServiceMeta>> serviceInstances = serviceDiscovery.queryForInstances(serviceName);
-        // 从多个实例中选择一个 (负载均衡)
-        ServiceInstance<ServiceMeta> instance = serviceLoadBalancer.select((List<ServiceInstance<ServiceMeta>>) serviceInstances, invokerHashCode, sourceIp);
-        if (instance == null) {
-            return null;
+        if (serviceLoadBalancer != null) {
+            return getServiceMetaInstance(invokerHashCode, sourceIp, (List<ServiceInstance<ServiceMeta>>) serviceInstances);
         }
-        return instance.getPayload();
+        return this.serviceEnhancedLoadBalancer.select(ServiceLoadBalancerHelper.getServiceMetaList((List<ServiceInstance<ServiceMeta>>) serviceInstances), invokerHashCode, sourceIp);
+    }
+
+    private ServiceMeta getServiceMetaInstance(int invokerHashCode, String sourceIp, List<ServiceInstance<ServiceMeta>> serviceInstances) {
+        ServiceInstance<ServiceMeta> instance = this.serviceLoadBalancer.select(serviceInstances, invokerHashCode, sourceIp);
+        if (instance != null) {
+            return instance.getPayload();
+        }
+        return null;
     }
 
     @Override

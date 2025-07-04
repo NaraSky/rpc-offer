@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 @RpcService(interfaceClass = DemoService.class,
         interfaceClassName = "com.lb.rpc.test.api.DemoService",
-        version = "1.0.0", group = "zhiyu")
+        version = "1.0.0", group = "zhiyu", weight = 2)
 public class ProviderDemoServiceImpl implements DemoService {
 
     private final Logger logger = LoggerFactory.getLogger(ProviderDemoServiceImpl.class);

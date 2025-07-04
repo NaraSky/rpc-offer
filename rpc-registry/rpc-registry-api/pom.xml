@@ -68,6 +68,11 @@
             <artifactId>rpc-loadbalancer-consistenthash-zk</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-loadbalancer-random-weight</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

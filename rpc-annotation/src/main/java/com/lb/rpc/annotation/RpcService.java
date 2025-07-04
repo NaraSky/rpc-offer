@@ -77,4 +77,9 @@ public @interface RpcService {
      */
     String group() default "";
 
+    /**
+     * 权重
+     */
+    int weight() default 0;
+
 }

@@ -3,6 +3,7 @@ package com.lb.rpc.provider.common.scanner;
 import com.lb.rpc.annotation.RpcService;
 import com.lb.rpc.common.helper.RpcServiceHelper;
 import com.lb.rpc.common.scanner.ClassScanner;
+import com.lb.rpc.constants.RpcConstants;
 import com.lb.rpc.protocol.meta.ServiceMeta;
 import com.lb.rpc.registry.api.RegistryService;
 import org.slf4j.Logger;
@@ -49,8 +50,8 @@ public class RpcServiceScanner extends ClassScanner {
                 // 判断是否标注了 @RpcService
                 RpcService rpcService = clazz.getAnnotation(RpcService.class);
                 if (rpcService != null) {
-                    // 构建服务元数据，包含 name/version/group/host/port
-                    ServiceMeta serviceMeta = new ServiceMeta(getServiceName(rpcService), rpcService.version(), rpcService.group(), host, port);
+                    // 构建服务元数据，包含 name/version/group/host/port/weight
+                    ServiceMeta serviceMeta = new ServiceMeta(getServiceName(rpcService), rpcService.version(), rpcService.group(), host, port, getWeight(rpcService.weight()));
 
                     // 注册到注册中心
                     registryService.register(serviceMeta);
@@ -69,6 +70,16 @@ public class RpcServiceScanner extends ClassScanner {
             }
         });
         return handlerMap;
+    }
+
+    private static int getWeight(int weight) {
+        if (weight < RpcConstants.SERVICE_WEIGHT_MIN) {
+            weight = RpcConstants.SERVICE_WEIGHT_MIN;
+        }
+        if (weight > RpcConstants.SERVICE_WEIGHT_MAX) {
+            weight = RpcConstants.SERVICE_WEIGHT_MAX;
+        }
+        return weight;
     }
 
     /**
