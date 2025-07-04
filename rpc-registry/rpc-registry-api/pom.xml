@@ -93,6 +93,11 @@
             <artifactId>rpc-loadbalancer-consistenthash-zk-enhanced</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-loadbalancer-least-connections</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
