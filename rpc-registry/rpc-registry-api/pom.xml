@@ -78,6 +78,11 @@
             <artifactId>rpc-loadbalancer-round-robin-weight-enhanced</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.lb</groupId>
+            <artifactId>rpc-loadbalancer-hash-weight-enhanced</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

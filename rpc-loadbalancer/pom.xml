@@ -24,6 +24,7 @@
         <module>rpc-loadbalancer-consistenthash-zk</module>
         <module>rpc-loadbalancer-random-weight-enhanced</module>
         <module>rpc-loadbalancer-round-robin-weight-enhanced</module>
+        <module>rpc-loadbalancer-hash-weight-enhanced</module>
     </modules>
 
     <properties>
