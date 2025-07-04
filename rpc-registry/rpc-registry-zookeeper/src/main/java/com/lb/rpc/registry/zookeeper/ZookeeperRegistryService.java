@@ -7,6 +7,7 @@ import com.lb.rpc.loadbalancer.helper.ServiceLoadBalancerHelper;
 import com.lb.rpc.protocol.meta.ServiceMeta;
 import com.lb.rpc.registry.api.RegistryService;
 import com.lb.rpc.registry.api.config.RegistryConfig;
+import com.lb.rpc.spi.annotation.SPIClass;
 import com.lb.rpc.spi.loader.ExtensionLoader;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -24,6 +25,7 @@ import java.util.List;
  * ZookeeperRegistryService——基于 Apache Curator 实现的注册中心服务，
  * 支持服务注册、注销和发现。内部使用 JSON 序列化 ServiceMeta。
  */
+@SPIClass
 public class ZookeeperRegistryService implements RegistryService {
 
     /**

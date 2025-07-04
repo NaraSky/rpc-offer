@@ -2,6 +2,7 @@ package com.lb.rpc.registry.api;
 
 import com.lb.rpc.protocol.meta.ServiceMeta;
 import com.lb.rpc.registry.api.config.RegistryConfig;
+import com.lb.rpc.spi.annotation.SPI;
 
 import java.io.IOException;
 
@@ -9,6 +10,7 @@ import java.io.IOException;
  * 注册中心服务接口
  * 定义了服务注册、发现、注销等核心功能
  */
+@SPI
 public interface RegistryService {
 
     void register(ServiceMeta serviceMeta) throws Exception;

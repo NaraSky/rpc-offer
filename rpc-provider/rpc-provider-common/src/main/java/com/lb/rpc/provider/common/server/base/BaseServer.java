@@ -7,6 +7,7 @@ import com.lb.rpc.provider.common.server.api.Server;
 import com.lb.rpc.registry.api.RegistryService;
 import com.lb.rpc.registry.api.config.RegistryConfig;
 import com.lb.rpc.registry.zookeeper.ZookeeperRegistryService;
+import com.lb.rpc.spi.loader.ExtensionLoader;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -53,8 +54,7 @@ public class BaseServer implements Server {
     private RegistryService getRegistryService(String registryAddress, String registryType, String registryLoadBalanceType) {
         RegistryService registryService = null;
         try {
-            // todo 后续可通过 SPI 扩展支持其他注册中心。
-            registryService = new ZookeeperRegistryService();
+            registryService = ExtensionLoader.getExtension(RegistryService.class, registryType);
             registryService.init(new RegistryConfig(registryAddress, registryType, registryLoadBalanceType));
         } catch (Exception e) {
             logger.error("RPC Server init error", e);

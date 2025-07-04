@@ -11,6 +11,7 @@ import com.lb.rpc.proxy.api.future.RPCFuture;
 import com.lb.rpc.registry.api.RegistryService;
 import com.lb.rpc.registry.api.config.RegistryConfig;
 import com.lb.rpc.registry.zookeeper.ZookeeperRegistryService;
+import com.lb.rpc.spi.loader.ExtensionLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -55,8 +56,7 @@ public class RpcConsumerHandlerTest {
         if (StringUtils.isEmpty(registryType)) {
             throw new IllegalArgumentException("registry type is null");
         }
-        //TODO 后续SPI扩展
-        RegistryService registryService = new ZookeeperRegistryService();
+        RegistryService registryService = ExtensionLoader.getExtension(RegistryService.class, registryType);
         try {
             registryService.init(new RegistryConfig(registryAddress, registryType, registryLoadBalanceType));
         } catch (Exception e) {
