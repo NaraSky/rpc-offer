@@ -7,6 +7,14 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 
+/**
+ * JDK原生反射实现
+ * <p>
+ * 【性能特征】
+ * - 优点：JDK原生支持，兼容性最好，无额外依赖
+ * - 缺点：性能相对较低，尤其是频繁调用时
+ * - 适用场景：对性能要求不高，追求稳定性的场景
+ */
 @SPIClass
 public class JdkReflectInvoker implements ReflectInvoker {
 

@@ -1,5 +1,9 @@
 package com.lb.rpc.common.helper;
 
+/**
+ * 拼接服务 key 的工具：
+ * 格式为 serviceName#version#group
+ */
 public class RpcServiceHelper {
 
     /**

@@ -2,7 +2,6 @@ package com.lb.rpc.registry.zookeeper;
 
 import com.lb.rpc.common.helper.RpcServiceHelper;
 import com.lb.rpc.loadbalancer.api.ServiceLoadBalancer;
-import com.lb.rpc.loadbalancer.random.RandomServiceLoadBalancer;
 import com.lb.rpc.protocol.meta.ServiceMeta;
 import com.lb.rpc.registry.api.RegistryService;
 import com.lb.rpc.registry.api.config.RegistryConfig;
@@ -18,11 +17,10 @@ import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 /**
- * 基于Zookeeper的注册中心实现
- * 使用Apache Curator框架进行Zookeeper操作
+ * ZookeeperRegistryService——基于 Apache Curator 实现的注册中心服务，
+ * 支持服务注册、注销和发现。内部使用 JSON 序列化 ServiceMeta。
  */
 public class ZookeeperRegistryService implements RegistryService {
 

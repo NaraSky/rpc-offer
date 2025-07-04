@@ -2,6 +2,14 @@ package com.lb.rpc.reflect.api;
 
 import com.lb.rpc.spi.annotation.SPI;
 
+/**
+ * 反射调用器SPI接口
+ * <p>
+ * 【SPI设计模式】
+ * SPI (Service Provider Interface) 是一种服务发现机制，
+ * 允许在运行时动态加载不同的实现。这里用于支持多种反射实现，
+ * 每种实现都有其特定的优势和使用场景。
+ */
 @SPI
 public interface ReflectInvoker {
 
