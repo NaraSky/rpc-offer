@@ -25,6 +25,7 @@
         <module>rpc-loadbalancer-random-weight-enhanced</module>
         <module>rpc-loadbalancer-round-robin-weight-enhanced</module>
         <module>rpc-loadbalancer-hash-weight-enhanced</module>
+        <module>rpc-loadbalancer-sourceip-hash-weight-enhanced</module>
     </modules>
 
     <properties>
